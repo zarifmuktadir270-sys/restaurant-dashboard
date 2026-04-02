@@ -11,8 +11,8 @@ export async function GET() {
     const agentStatuses = await checkAllAgents(restaurants)
 
     return NextResponse.json({
-      agents: agentStatuses.map((s) => {
-        const r = restaurants.find((r) => r.id === s.id)!
+      agents: agentStatuses.map((s: any) => {
+        const r = restaurants.find((r: any) => r.id === s.id)!
         return {
           ...r,
           realStatus: s.online ? 'running' : 'offline',
