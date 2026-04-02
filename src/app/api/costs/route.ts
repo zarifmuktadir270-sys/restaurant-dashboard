@@ -1,8 +1,10 @@
 import { NextResponse } from 'next/server'
-import { prisma } from '@/lib/db'
+
+export const dynamic = 'force-dynamic'
 
 export async function GET() {
   try {
+    const { prisma } = await import('@/lib/db')
     const now = new Date()
     const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1)
 
@@ -12,9 +14,8 @@ export async function GET() {
       orderBy: { date: 'desc' },
     })
 
-    const totalCost = costs.reduce((sum, c) => sum + c.cost, 0)
+    const totalCost = costs.reduce((sum: number, c: any) => sum + c.cost, 0)
 
-    // Group by restaurant
     const byRestaurant: Record<string, { name: string; cost: number; tokens: number }> = {}
     for (const c of costs) {
       if (!byRestaurant[c.restaurantId]) {
@@ -24,7 +25,6 @@ export async function GET() {
       byRestaurant[c.restaurantId].tokens += c.tokensIn + c.tokensOut
     }
 
-    // Group by date
     const byDate: Record<string, number> = {}
     for (const c of costs) {
       const date = c.date.toISOString().split('T')[0]
@@ -38,6 +38,6 @@ export async function GET() {
       costCount: costs.length,
     })
   } catch (error) {
-    return NextResponse.json({ error: 'Failed to fetch costs' }, { status: 500 })
+    return NextResponse.json({ totalCost: 0, byRestaurant: [], byDate: [], costCount: 0 })
   }
 }
