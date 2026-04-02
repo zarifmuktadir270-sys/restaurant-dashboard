@@ -1,0 +1,36 @@
+version: "3.8"
+
+services:
+  dashboard:
+    build: .
+    ports:
+      - "80:3000"
+    environment:
+      - DATABASE_URL=postgresql://dashboard:dashboard123@db:5432/dashboard
+      - NODE_ENV=production
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./restaurants:/app/restaurants
+      - ./shared:/app/shared
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
+  db:
+    image: postgres:16-alpine
+    environment:
+      - POSTGRES_USER=dashboard
+      - POSTGRES_PASSWORD=dashboard123
+      - POSTGRES_DB=dashboard
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U dashboard"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+volumes:
+  db_data:

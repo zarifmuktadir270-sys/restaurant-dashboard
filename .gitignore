@@ -1,0 +1,38 @@
+# Dependencies
+node_modules/
+.next/
+.npm/
+
+# Build
+*.tsbuildinfo
+dist/
+
+# Environment
+.env
+.env.local
+.env.production
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Runtime data
+restaurants/
+!restaurants/.gitkeep
+
+# Logs
+*.log
+logs/
+
+# Database
+*.db
+*.sqlite
+db_data/
+
+# Temp
+tmp/
+temp/

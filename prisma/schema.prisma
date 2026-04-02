@@ -1,0 +1,82 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String
+  role      String   @default("admin")
+  createdAt DateTime @default(now())
+}
+
+model Restaurant {
+  id            String    @id @default(cuid())
+  name          String
+  slug          String    @unique
+  type          String
+  ownerName     String
+  ownerPhone    String
+  ownerEmail    String?
+  timezone      String    @default("UTC")
+  posProvider   String    @default("manual")
+  posToken      String?
+  status        String    @default("active")
+  containerId   String?
+  containerName String?
+  port          Int?
+  tier          String    @default("tier1")
+  monthlyBudget Int       @default(5000)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  agents        Agent[]
+  costs         Cost[]
+  activities    Activity[]
+}
+
+model Agent {
+  id           String     @id @default(cuid())
+  restaurantId String
+  restaurant   Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+  name         String
+  role         String
+  status       String     @default("idle")
+  lastActive   DateTime?
+  totalTokens  Int        @default(0)
+  totalCost    Float      @default(0)
+  createdAt    DateTime   @default(now())
+}
+
+model Cost {
+  id           String     @id @default(cuid())
+  restaurantId String
+  restaurant   Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+  date         DateTime
+  modelUsed    String
+  tokensIn     Int
+  tokensOut    Int
+  cost         Float
+  task         String?
+}
+
+model Activity {
+  id           String     @id @default(cuid())
+  restaurantId String
+  restaurant   Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+  type         String
+  message      String
+  createdAt    DateTime   @default(now())
+}
+
+model Config {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  value     String
+  updatedAt DateTime @updatedAt
+}
