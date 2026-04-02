@@ -26,7 +26,6 @@
     "postcss": "^8.4.0",
     "autoprefixer": "^10.4.0",
     "clsx": "^2.1.0",
-    "lucide-react": "^0.400.0",
     "date-fns": "^3.6.0"
   },
   "devDependencies": {
