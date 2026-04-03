@@ -1,7 +1,7 @@
-'use client'
-import Link from 'next/link'
+'use client';
+import Link from 'next/link';
 
-export default function Page() {
+export default function Costs() {
   return (
     <div style={{ minHeight: '100vh', background: '#0a0a0a', color: 'white', fontFamily: 'system-ui' }}>
       <div style={{ display: 'flex', minHeight: '100vh' }}>
@@ -20,5 +20,5 @@ export default function Page() {
         </div>
       </div>
     </div>
-  )
+  );
 }
